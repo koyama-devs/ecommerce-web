@@ -1,0 +1,92 @@
+{
+  "productList": {
+    "filterByCategory": "Category",
+    "allCategories": "All",
+    "title": "Product List"
+  },
+  "priceFilter": {
+    "title": "Filter by Price",
+    "priceRange": "Price Range",
+    "currencySymbol": "¥"
+  },
+  "productCard": {
+    "viewDetails": "View Details",
+    "addedToCart": "Added to Cart"
+  },
+  "productTag": {
+    "bestSeller": "Best Seller",
+    "newArrival": "New Arrival",
+    "new": "New",
+    "sale": "Sale"
+  },
+  "promoCarousel": {
+    "summerSale": {
+      "title": "Summer Sale is Here!",
+      "subtitle": "Up to 50% off selected items"
+    },
+    "newArrival": {
+      "title": "New Arrivals",
+      "subtitle": "Fresh styles just in"
+    },
+    "bestDeal": {
+      "title": "Best Deals Today",
+      "subtitle": "Limited-time offers you can't miss"
+    }
+  },
+  "footer": {
+    "aboutUs": "About Us",
+    "aboutDesc": "We offer quality products at affordable prices.",
+    "support": "Support",
+    "contact": "Contact",
+    "help": "Help Center",
+    "shipping": "Shipping Info",
+    "policy": "Policy",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "returns": "Return Policy",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Subscribe to get updates and offers.",
+    "email": "Email address",
+    "subscribe": "Subscribe",
+    "feedback": "Feedback",
+    "feedbackDesc": "We value your opinion!",
+    "message": "Your message",
+    "send": "Send",
+    "companyName": "Koyama Inc.",
+    "allRightsReserved": "All rights reserved.",
+    "subscribed": "Thank you for subscribing!"
+  },
+  "header": {
+    "title": "Online Shop",
+    "products": "Products"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty.",
+    "totalPerItem": "Total",
+    "remove": "Remove",
+    "totalCartPrice": "Total Price",
+    "clear": "Clear Cart"
+  },
+  "homePage": {
+    "hero": {
+      "title": "Discover Great Products"
+    },
+    "featuredProducts": {
+      "title": "Featured Products"
+    },
+    "search": {
+      "label": "Search products...",
+      "noResults": "No products found"
+    },
+    "viewAllProducts": "View All Products"
+  },
+  "notFound": {
+    "title": "404 Not Found",
+    "message": "The page you are looking for does not exist."
+  },
+  "productDetail": {
+    "notFound": "Product not found",
+    "addToCart": "Add to Cart"
+  }
+}

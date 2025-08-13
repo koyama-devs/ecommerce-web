@@ -1,0 +1,92 @@
+{
+  "productList": {
+    "filterByCategory": "カテゴリ",
+    "allCategories": "すべて",
+    "title": "商品一覧"
+  },
+  "priceFilter": {
+    "title": "価格で絞り込む",
+    "priceRange": "価格範囲",
+    "currencySymbol": "¥"
+  },
+  "productCard": {
+    "viewDetails": "詳細を見る",
+    "addedToCart": "カートに追加しました"
+  },
+  "productTag": {
+    "bestSeller": "ベストセラー",
+    "newArrival": "新入荷",
+    "new": "新着",
+    "sale": "セール"
+  },
+  "promoCarousel": {
+    "summerSale": {
+      "title": "夏のセール開催中！",
+      "subtitle": "対象商品最大50％オフ"
+    },
+    "newArrival": {
+      "title": "新商品入荷",
+      "subtitle": "最新トレンドが登場"
+    },
+    "bestDeal": {
+      "title": "本日のおすすめ",
+      "subtitle": "見逃せない期間限定オファー"
+    }
+  },
+  "footer": {
+    "aboutUs": "会社概要",
+    "aboutDesc": "お手頃価格で高品質な商品を提供します。",
+    "support": "サポート",
+    "contact": "お問い合わせ",
+    "help": "ヘルプセンター",
+    "shipping": "配送情報",
+    "policy": "ポリシー",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "returns": "返品ポリシー",
+    "newsletter": "ニュースレター",
+    "newsletterDesc": "最新情報やお得な情報をお届けします。",
+    "email": "メールアドレス",
+    "subscribe": "購読する",
+    "feedback": "フィードバック",
+    "feedbackDesc": "あなたのご意見をお聞かせください！",
+    "message": "メッセージ",
+    "send": "送信",
+    "companyName": "Koyama株式会社",
+    "allRightsReserved": "全著作権所有。",
+    "subscribed": "ご登録ありがとうございます！"
+  },
+  "header": {
+    "title": "オンラインショップ",
+    "products": "商品"
+  },
+  "cart": {
+    "title": "ショッピングカート",
+    "empty": "カートに商品がありません。",
+    "totalPerItem": "小計",
+    "remove": "削除",
+    "totalCartPrice": "合計金額",
+    "clear": "カートを空にする"
+  },
+  "homePage": {
+    "hero": {
+      "title": "素敵な商品を見つけよう"
+    },
+    "featuredProducts": {
+      "title": "おすすめ商品"
+    },
+    "search": {
+      "label": "商品を検索...",
+      "noResults": "商品が見つかりませんでした"
+    },
+    "viewAllProducts": "すべての商品を見る"
+  },
+  "notFound": {
+    "title": "404 見つかりません",
+    "message": "お探しのページは存在しません。"
+  },
+  "productDetail": {
+    "notFound": "商品が見つかりませんでした",
+    "addToCart": "カートに追加"
+  }
+}

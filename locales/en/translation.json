@@ -1,0 +1,92 @@
+{
+  "productList": {
+    "filterByCategory": "",
+    "allCategories": "",
+    "title": ""
+  },
+  "priceFilter": {
+    "title": "",
+    "priceRange": "",
+    "currencySymbol": ""
+  },
+  "productCard": {
+    "viewDetails": "",
+    "addedToCart": ""
+  },
+  "productTag": {
+    "bestSeller": "",
+    "newArrival": "",
+    "new": "",
+    "sale": ""
+  },
+  "promoCarousel": {
+    "summerSale": {
+      "title": "",
+      "subtitle": ""
+    },
+    "newArrival": {
+      "title": "",
+      "subtitle": ""
+    },
+    "bestDeal": {
+      "title": "",
+      "subtitle": ""
+    }
+  },
+  "footer": {
+    "aboutUs": "",
+    "aboutDesc": "",
+    "support": "",
+    "contact": "",
+    "help": "",
+    "shipping": "",
+    "policy": "",
+    "privacy": "",
+    "terms": "",
+    "returns": "",
+    "newsletter": "",
+    "newsletterDesc": "",
+    "email": "",
+    "subscribe": "",
+    "feedback": "",
+    "feedbackDesc": "",
+    "message": "",
+    "send": "",
+    "companyName": "",
+    "allRightsReserved": "",
+    "subscribed": ""
+  },
+  "header": {
+    "title": "",
+    "products": ""
+  },
+  "cart": {
+    "title": "",
+    "empty": "",
+    "totalPerItem": "",
+    "remove": "",
+    "totalCartPrice": "",
+    "clear": ""
+  },
+  "homePage": {
+    "hero": {
+      "title": ""
+    },
+    "featuredProducts": {
+      "title": ""
+    },
+    "search": {
+      "label": "",
+      "noResults": ""
+    },
+    "viewAllProducts": ""
+  },
+  "notFound": {
+    "title": "",
+    "message": ""
+  },
+  "productDetail": {
+    "notFound": "",
+    "addToCart": ""
+  }
+}

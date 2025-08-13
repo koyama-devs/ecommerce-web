@@ -1,0 +1,92 @@
+{
+  "productList": {
+    "filterByCategory": "Danh mục",
+    "allCategories": "Tất cả",
+    "title": "Danh sách sản phẩm"
+  },
+  "priceFilter": {
+    "title": "Lọc theo giá",
+    "priceRange": "Khoảng giá",
+    "currencySymbol": "₫"
+  },
+  "productCard": {
+    "viewDetails": "Xem chi tiết",
+    "addedToCart": "Đã thêm vào giỏ"
+  },
+  "productTag": {
+    "bestSeller": "Bán chạy",
+    "newArrival": "Hàng mới",
+    "new": "Mới",
+    "sale": "Giảm giá"
+  },
+  "promoCarousel": {
+    "summerSale": {
+      "title": "Khuyến mãi mùa hè đã đến!",
+      "subtitle": "Giảm đến 50% cho một số mặt hàng"
+    },
+    "newArrival": {
+      "title": "Hàng mới về",
+      "subtitle": "Nhiều mẫu mới vừa cập bến"
+    },
+    "bestDeal": {
+      "title": "Ưu đãi tốt nhất hôm nay",
+      "subtitle": "Khuyến mãi giới hạn không thể bỏ lỡ"
+    }
+  },
+  "footer": {
+    "aboutUs": "Về chúng tôi",
+    "aboutDesc": "Chúng tôi cung cấp sản phẩm chất lượng với giá cả hợp lý.",
+    "support": "Hỗ trợ",
+    "contact": "Liên hệ",
+    "help": "Trung tâm trợ giúp",
+    "shipping": "Thông tin giao hàng",
+    "policy": "Chính sách",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "returns": "Chính sách đổi trả",
+    "newsletter": "Bản tin",
+    "newsletterDesc": "Đăng ký để nhận thông tin và ưu đãi.",
+    "email": "Địa chỉ email",
+    "subscribe": "Đăng ký",
+    "feedback": "Phản hồi",
+    "feedbackDesc": "Chúng tôi trân trọng ý kiến của bạn!",
+    "message": "Tin nhắn của bạn",
+    "send": "Gửi",
+    "companyName": "Koyama Inc.",
+    "allRightsReserved": "Đã đăng ký bản quyền.",
+    "subscribed": "Cảm ơn bạn đã đăng ký!"
+  },
+  "header": {
+    "title": "Cửa hàng trực tuyến",
+    "products": "Sản phẩm"
+  },
+  "cart": {
+    "title": "Giỏ hàng",
+    "empty": "Giỏ hàng của bạn đang trống.",
+    "totalPerItem": "Tổng",
+    "remove": "Xóa",
+    "totalCartPrice": "Tổng thanh toán",
+    "clear": "Xóa giỏ"
+  },
+  "homePage": {
+    "hero": {
+      "title": "Khám phá sản phẩm tuyệt vời"
+    },
+    "featuredProducts": {
+      "title": "Sản phẩm nổi bật"
+    },
+    "search": {
+      "label": "Tìm kiếm sản phẩm...",
+      "noResults": "Không tìm thấy sản phẩm nào"
+    },
+    "viewAllProducts": "Xem tất cả"
+  },
+  "notFound": {
+    "title": "404 Không tìm thấy",
+    "message": "Trang bạn tìm không tồn tại."
+  },
+  "productDetail": {
+    "notFound": "Không tìm thấy sản phẩm",
+    "addToCart": "Thêm vào giỏ"
+  }
+}

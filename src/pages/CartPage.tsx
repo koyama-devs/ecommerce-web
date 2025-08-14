@@ -1,21 +1,22 @@
-import { useCart } from "../context/CartContext";
-import {
-  Container,
-  Typography,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Button,
-  Stack,
-  Box,
-  IconButton,
-} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
+import CheckoutButton from "../components/CheckoutButton";
+import { useCart } from "../context/CartContext";
 
 export default function CartPage() {
   const {
@@ -199,6 +200,7 @@ export default function CartPage() {
           >
             {t("cart.clear")}
           </Button>
+          <CheckoutButton totalPrice={totalPrice} />
         </>
       )}
     </Container>

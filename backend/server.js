@@ -16,21 +16,28 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // API tạo Payment Intent
 app.post("/api/create-payment-intent", async (req, res) => {
   const { amount } = req.body;
+
+  console.log("📩 Yêu cầu tạo payment intent với số tiền:", amount);
+
   try {
-    // Stripe yêu cầu amount là số nguyên (JPY không có phần thập phân)
+    // Kiểm tra số tiền hợp lệ
     if (!amount || isNaN(amount) || amount <= 0) {
+      console.warn("⚠️ Số tiền không hợp lệ:", amount);
       return res.status(400).send({ error: "Số tiền không hợp lệ" });
     }
 
+    // Tạo PaymentIntent trên Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: Math.round(amount), // JPY không có phần thập phân
       currency: "jpy",
-      payment_method_types: ["card"], // Chỉ dùng thẻ test
+      automatic_payment_methods: { enabled: true }, // Stripe tự xử lý thẻ, Apple Pay, Google Pay...
     });
+
+    console.log("✅ PaymentIntent created:", paymentIntent.id);
 
     res.send({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Lỗi Stripe:", error.message);
     res.status(500).send({ error: error.message });
   }
 });

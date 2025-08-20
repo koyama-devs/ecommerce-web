@@ -216,9 +216,11 @@ export async function generateInvoicePDF(data: InvoiceData) {
   const terms =
     data.extras?.terms ||
     "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).";
+  doc.setTextColor(255, 0, 0); // đỏ
   doc.setFontSize(10);
   doc.setFont("NotoSans", "normal");
   doc.text(terms, marginX, blockY + 80, { maxWidth: pageWidth - 2 * marginX });
+  doc.setTextColor(0, 0, 0); // reset về màu đen cho các phần sau
 
   // === Lời cảm ơn (in nghiêng) ===
   const thanks =

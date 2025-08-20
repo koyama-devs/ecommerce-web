@@ -50,8 +50,8 @@ export type InvoiceData = {
   extras?: { terms?: string; thanksNote?: string; signer?: string };
 };
 
-const formatJPY = (n: number) =>
-  new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY" }).format(Math.round(n));
+const formatCurrency = (n: number, currency: string = "JPY") =>
+  `${new Intl.NumberFormat("ja-JP").format(Math.round(n))} ${currency}`;
 
 async function loadImageAsDataURL(url?: string): Promise<string | null> {
   if (!url) return null;
@@ -103,7 +103,7 @@ export async function generateInvoicePDF(data: InvoiceData) {
   storeLines.forEach((line, idx) => doc.text(line, marginX, storeY + idx * 14));
   y = storeY + storeLines.length * 14 + 20;
 
-  // === Thông tin hóa đơn + khách hàng (dùng autoTable 2 cột) ===
+  // === Thông tin hóa đơn + khách hàng ===
   const invoiceInfo = [
     ["Số hóa đơn", data.invoice.invoiceNumber],
     ["Ngày lập", data.invoice.date],
@@ -119,59 +119,56 @@ export async function generateInvoicePDF(data: InvoiceData) {
     data.customer.customerId ? ["Mã KH", data.customer.customerId] : null,
   ].filter(Boolean) as [string, string][];
 
-// Tạo dữ liệu
-const formattedInvoiceInfo = invoiceInfo.map(([label, value]) => [
-  { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Label in đậm
-  { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Value
-]);
+  const formattedInvoiceInfo = invoiceInfo.map(([label, value]) => [
+    { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+    { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+  ]);
 
-const formattedCustomerInfo = customerInfo.map(([label, value]) => [
-  { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Label in đậm
-  { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Value
-]);
+  const formattedCustomerInfo = customerInfo.map(([label, value]) => [
+    { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+    { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+  ]);
 
-// Ghép body thành 4 cột phẳng
-const body = invoiceInfo.map((_, i) => [
-  formattedInvoiceInfo[i]?.[0] || "",
-  formattedInvoiceInfo[i]?.[1] || "",
-  formattedCustomerInfo[i]?.[0] || "",
-  formattedCustomerInfo[i]?.[1] || "",
-]);
+  const body = invoiceInfo.map((_, i) => [
+    formattedInvoiceInfo[i]?.[0] || "",
+    formattedInvoiceInfo[i]?.[1] || "",
+    formattedCustomerInfo[i]?.[0] || "",
+    formattedCustomerInfo[i]?.[1] || "",
+  ]);
 
-const usablePageWidth = pageWidth - marginX * 2; // Chiều rộng có thể sử dụng
+  const usablePageWidth = pageWidth - marginX * 2;
 
-autoTable(doc, {
-  startY: y,
-  margin: { left: marginX, right: marginX }, // Thêm margin
-  head: [[
-    { content: "Thông tin hóa đơn", colSpan: 2},
-    { content: "Thông tin khách hàng", colSpan: 2},
-  ]],
-  body,
-  theme: "grid",
-  styles: {
-    font: "NotoSans",
-    fontStyle: "normal",
-    fontSize: 10,
-    cellPadding: 4,
-    valign: "top",
-  },
-  headStyles: {
-    halign: "left",
-    font: "NotoSans",
-    fontStyle: "normal",
-    fontSize: 11,
-    fillColor: [230, 230, 230],
-    textColor: [0, 0, 0],
-  },
-  columnStyles: {
-    0: { cellWidth: usablePageWidth * 0.15, halign: "left" }, // label invoice
-    1: { cellWidth: usablePageWidth * 0.35, halign: "left" }, // value invoice
-    2: { cellWidth: usablePageWidth * 0.15, halign: "left" }, // label customer
-    3: { cellWidth: usablePageWidth * 0.35, halign: "left" }, // value customer
-  },
-});
-
+  autoTable(doc, {
+    startY: y,
+    margin: { left: marginX, right: marginX },
+    head: [[
+      { content: "Thông tin hóa đơn", colSpan: 2 },
+      { content: "Thông tin khách hàng", colSpan: 2 },
+    ]],
+    body,
+    theme: "grid",
+    styles: {
+      font: "NotoSans",
+      fontStyle: "normal",
+      fontSize: 10,
+      cellPadding: 4,
+      valign: "top",
+    },
+    headStyles: {
+      halign: "left",
+      font: "NotoSans",
+      fontStyle: "normal",
+      fontSize: 11,
+      fillColor: [230, 230, 230],
+      textColor: [0, 0, 0],
+    },
+    columnStyles: {
+      0: { cellWidth: usablePageWidth * 0.15, halign: "left" },
+      1: { cellWidth: usablePageWidth * 0.35, halign: "left" },
+      2: { cellWidth: usablePageWidth * 0.15, halign: "left" },
+      3: { cellWidth: usablePageWidth * 0.35, halign: "left" },
+    },
+  });
 
   // === Bảng sản phẩm ===
   const tableStartY = (doc as any).lastAutoTable.finalY + 20;
@@ -182,8 +179,8 @@ autoTable(doc, {
       String(idx + 1),
       it.name,
       String(it.quantity),
-      formatJPY(it.price),
-      formatJPY(it.price * it.quantity),
+      formatCurrency(it.price, data.totals.currency || "JPY"),
+      formatCurrency(it.price * it.quantity, data.totals.currency || "JPY"),
     ]),
     theme: "striped",
     styles: { font: "NotoSans", fontStyle: "normal", fontSize: 10, cellPadding: 6 },
@@ -200,32 +197,48 @@ autoTable(doc, {
   const afterTableY = (doc as any).lastAutoTable.finalY + 30;
   const summaryX = pageWidth - marginX - 250;
   const summaryWidth = 250;
+  const currency = data.totals.currency || "JPY";
 
   doc.setDrawColor(200);
-  doc.rect(summaryX, afterTableY, summaryWidth, 120);
+  doc.rect(summaryX, afterTableY, summaryWidth, 140); // tăng chiều cao box thêm 10px
 
   doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
   doc.text("Tổng kết thanh toán", summaryX + 10, afterTableY + 20);
+
   const summary = [
-    ["Tạm tính:", formatJPY(data.totals.subtotal)],
+    ["Tạm tính:", formatCurrency(data.totals.subtotal, currency)],
     [
       `Thuế${data.totals.vatRate ? ` (${Math.round(data.totals.vatRate * 100)}%)` : ""}:`,
-      formatJPY(data.totals.tax),
+      formatCurrency(data.totals.tax, currency),
     ],
-    ["Phí vận chuyển:", formatJPY(data.totals.shippingFee)],
-    ["Giảm giá:", `- ${formatJPY(data.totals.discount)}`],
+    ["Phí vận chuyển:", formatCurrency(data.totals.shippingFee, currency)],
+    ["Giảm giá:", `- ${formatCurrency(data.totals.discount, currency)}`],
   ];
+
   let yy = afterTableY + 40;
   summary.forEach(([label, value]) => {
     doc.text(label, summaryX + 10, yy);
     doc.text(value, summaryX + summaryWidth - 10, yy, { align: "right" });
     yy += 16;
   });
+
+  // Đường phân cách trước TỔNG CỘNG
+  doc.setLineWidth(0.5);
+  doc.line(summaryX + 10, yy, summaryX + summaryWidth - 10, yy);
+  yy += 25; // chừa thêm khoảng cách
+
+  // In TỔNG CỘNG
   doc.setFontSize(13);
-  doc.text("TỔNG CỘNG:", summaryX + 10, yy + 8);
-  doc.text(formatJPY(data.totals.grandTotal), summaryX + summaryWidth - 10, yy + 8, {
+  doc.setTextColor(0, 0, 0);
+  doc.text("TỔNG CỘNG:", summaryX + 10, yy);
+
+  doc.setTextColor(255, 87, 34); // màu cam cho số tiền
+  doc.text(formatCurrency(data.totals.grandTotal, currency), summaryX + summaryWidth - 10, yy, {
     align: "right",
   });
+  doc.setTextColor(0, 0, 0); // reset màu về mặc định
+  doc.setFont("NotoSans", "normal");
 
   // === Chữ ký ===
   const blockY = yy + 60;
@@ -241,13 +254,13 @@ autoTable(doc, {
   const terms =
     data.extras?.terms ||
     "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).";
-  doc.setTextColor(255, 0, 0); // đỏ
+  doc.setTextColor(255, 0, 0);
   doc.setFontSize(10);
   doc.setFont("NotoSans", "normal");
   doc.text(terms, marginX, blockY + 80, { maxWidth: pageWidth - 2 * marginX });
-  doc.setTextColor(0, 0, 0); // reset về màu đen cho các phần sau
+  doc.setTextColor(0, 0, 0);
 
-  // === Lời cảm ơn (in nghiêng) ===
+  // === Lời cảm ơn ===
   const thanks =
     data.extras?.thanksNote ||
     "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.";

@@ -1,23 +1,23 @@
 import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CircularProgress,
-    Grid,
-    TextField,
-    Typography,
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import type {
-    CartItem,
-    InvoiceData,
-    StoreInfo,
+  CartItem,
+  InvoiceData,
+  StoreInfo,
 } from "./CheckoutButton";
 import {
-    generateInvoicePDF
+  generateInvoicePDF
 } from "./CheckoutButton";
 
 interface PaymentFormProps {
@@ -132,9 +132,9 @@ export default function PaymentForm({
           },
           extras: {
             terms:
-              "Đổi trả trong 7 ngày với sản phẩm còn nguyên tem/mác. Không áp dụng cho sản phẩm giảm giá sâu hoặc đã qua sử dụng.",
+              "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác. Không áp dụng cho sản phẩm giảm giá sâu hoặc đã qua sử dụng.",
             thanksNote:
-              "Cảm ơn bạn đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.",
+              "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.",
             signer: storeInfo.name,
           },
         };

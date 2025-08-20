@@ -247,14 +247,14 @@ export default function CartPage() {
               </Typography>
               <Typography sx={{ mb: 1 }}>
                 {invoiceData.extras?.terms ||
-                  "Đổi trả trong 7 ngày với sản phẩm còn nguyên tem/mác theo chính sách của cửa hàng."}
+                  "※ Đổi trả trong 7 ngày với sản phẩm còn nguyên tem/mác theo chính sách của cửa hàng."}
               </Typography>
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 Lời cảm ơn
               </Typography>
               <Typography sx={{ mb: 2 }}>
                 {invoiceData.extras?.thanksNote ||
-                  "Cảm ơn quý khách đã mua sắm! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."}
+                  "Cảm ơn quý khách đã mua hàng! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."}
               </Typography>
 
               <Button fullWidth variant="outlined" onClick={handleDownloadPDF}>

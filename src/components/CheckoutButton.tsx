@@ -1,4 +1,3 @@
-// CheckoutButton.tsx
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import jsPDF from "jspdf";
@@ -7,6 +6,7 @@ import PaymentForm from "./PaymentForm";
 
 // import font đã convert
 import "../fonts/NotoSans-base64.js";
+import "../fonts/NotoSans-Italic-base64.js";
 
 const stripePromise = loadStripe(
   "pk_test_51RvvuRJhVUeatzaxarReCCkpJ9HCqqnUjnOXlweugIBgyPqC9cOPiY0qZDQyiLq4ZEar8tl0prRZXOljOPSXYOFL00OVyMDP7l"
@@ -83,11 +83,13 @@ export async function generateInvoicePDF(data: InvoiceData) {
 
   doc.setFont("NotoSans", "normal");
 
+  // === Logo + Tiêu đề ===
   const logoDataUrl = await loadImageAsDataURL(data.store.logoUrl);
   if (logoDataUrl) doc.addImage(logoDataUrl, "PNG", marginX, y, 80, 80);
 
   doc.setFontSize(20);
-  doc.text("HÓA ĐƠN THANH TOÁN", pageWidth - marginX, y + 20, { align: "right" });
+  doc.setTextColor(33, 33, 33);
+  doc.text("HÓA ĐƠN THANH TOÁN", pageWidth / 2, y + 30, { align: "center" });
 
   doc.setFontSize(10);
   const storeLines = [
@@ -101,30 +103,53 @@ export async function generateInvoicePDF(data: InvoiceData) {
   storeLines.forEach((line, idx) => doc.text(line, marginX, storeY + idx * 14));
   y = storeY + storeLines.length * 14 + 20;
 
-  doc.setFontSize(12);
-  doc.text("Thông tin hóa đơn", marginX, y);
-  doc.text("Thông tin khách hàng", pageWidth / 2, y);
-
-  const leftMeta = [
-    `Số hóa đơn: ${data.invoice.invoiceNumber}`,
-    `Ngày lập: ${data.invoice.date}`,
-    `Mã đơn hàng: ${data.invoice.orderId}`,
-    `Hình thức thanh toán: ${data.invoice.paymentMethod}`,
-    `Trạng thái: ${data.invoice.paymentStatus}`,
+  // === Thông tin hóa đơn + khách hàng (dùng autoTable 2 cột) ===
+  const invoiceInfo = [
+    ["Số hóa đơn:", data.invoice.invoiceNumber],
+    ["Ngày lập:", data.invoice.date],
+    ["Mã đơn hàng:", data.invoice.orderId],
+    ["Hình thức thanh toán:", data.invoice.paymentMethod],
+    ["Trạng thái:", data.invoice.paymentStatus],
   ];
-  const rightMeta = [
-    `Họ tên: ${data.customer.name}`,
-    data.customer.phone ? `Điện thoại: ${data.customer.phone}` : "",
-    data.customer.email ? `Email: ${data.customer.email}` : "",
-    data.customer.shippingAddress ? `Đ/c giao hàng: ${data.customer.shippingAddress}` : "",
-    data.customer.customerId ? `Mã KH: ${data.customer.customerId}` : "",
-  ].filter(Boolean);
+  const customerInfo = [
+    ["Họ tên:", data.customer.name],
+    data.customer.phone ? ["Điện thoại:", data.customer.phone] : null,
+    data.customer.email ? ["Email:", data.customer.email] : null,
+    data.customer.shippingAddress ? ["Đ/c giao hàng:", data.customer.shippingAddress] : null,
+    data.customer.customerId ? ["Mã KH:", data.customer.customerId] : null,
+  ].filter(Boolean) as [string, string][];
 
-  y += 16;
-  leftMeta.forEach((line, i) => doc.text(line, marginX, y + i * 14));
-  rightMeta.forEach((line, i) => doc.text(line, pageWidth / 2, y + i * 14));
+  autoTable(doc, {
+    startY: y,
+    head: [["Thông tin hóa đơn", "Thông tin khách hàng"]],
+    body: invoiceInfo.map((row, i) => [
+      `${row[0]} ${row[1]}`,
+      customerInfo[i] ? `${customerInfo[i][0]} ${customerInfo[i][1]}` : "",
+    ]),
+    theme: "grid",
+    styles: { 
+      font: "NotoSans", 
+      fontStyle: "normal", 
+      fontSize: 10, 
+      cellPadding: 4, 
+      valign: "top" 
+    },
+    headStyles: { 
+      font: "NotoSans",      // 👈 ép dùng font embed
+      fontStyle: "normal", 
+      fontSize: 11, 
+      fillColor: [230, 230, 230], 
+      textColor: [0, 0, 0] 
+    },
+    columnStyles: {
+      0: { cellWidth: pageWidth / 2 - marginX, halign: "left" },
+      1: { cellWidth: pageWidth / 2 - marginX, halign: "left" },
+    },
+  });
 
-  const tableStartY = y + Math.max(leftMeta.length, rightMeta.length) * 14 + 20;
+
+  // === Bảng sản phẩm ===
+  const tableStartY = (doc as any).lastAutoTable.finalY + 20;
   autoTable(doc, {
     startY: tableStartY,
     head: [["STT", "Tên sản phẩm", "SL", "Đơn giá", "Thành tiền"]],
@@ -146,13 +171,18 @@ export async function generateInvoicePDF(data: InvoiceData) {
     },
   });
 
-  // === Tổng kết thanh toán (tách hẳn ra) ===
-  const afterTableY = (doc as any).lastAutoTable.finalY + 20; // thêm khoảng cách
-  const summaryX = pageWidth - marginX - 220;
+  // === Tổng kết thanh toán ===
+  const afterTableY = (doc as any).lastAutoTable.finalY + 30;
+  const summaryX = pageWidth - marginX - 250;
+  const summaryWidth = 250;
+
+  doc.setDrawColor(200);
+  doc.rect(summaryX, afterTableY, summaryWidth, 120);
+
   doc.setFontSize(12);
-  doc.text("Tổng kết thanh toán", summaryX, afterTableY);
+  doc.text("Tổng kết thanh toán", summaryX + 10, afterTableY + 20);
   const summary = [
-    ["Tổng giá trị sản phẩm:", formatJPY(data.totals.subtotal)],
+    ["Tạm tính:", formatJPY(data.totals.subtotal)],
     [
       `Thuế${data.totals.vatRate ? ` (${Math.round(data.totals.vatRate * 100)}%)` : ""}:`,
       formatJPY(data.totals.tax),
@@ -160,39 +190,43 @@ export async function generateInvoicePDF(data: InvoiceData) {
     ["Phí vận chuyển:", formatJPY(data.totals.shippingFee)],
     ["Giảm giá:", `- ${formatJPY(data.totals.discount)}`],
   ];
-  let yy = afterTableY + 16;
+  let yy = afterTableY + 40;
   summary.forEach(([label, value]) => {
-    doc.text(label, summaryX, yy);
-    doc.text(value, summaryX + 180, yy, { align: "right" });
+    doc.text(label, summaryX + 10, yy);
+    doc.text(value, summaryX + summaryWidth - 10, yy, { align: "right" });
     yy += 16;
   });
   doc.setFontSize(13);
-  doc.text("TỔNG CỘNG:", summaryX, yy + 8);
-  doc.text(formatJPY(data.totals.grandTotal), summaryX + 180, yy + 8, { align: "right" });
+  doc.text("TỔNG CỘNG:", summaryX + 10, yy + 8);
+  doc.text(formatJPY(data.totals.grandTotal), summaryX + summaryWidth - 10, yy + 8, {
+    align: "right",
+  });
 
-  // === Điều khoản & chính sách (canh trái) ===
-  const blockY = yy + 50;
+  // === Chữ ký ===
+  const blockY = yy + 60;
+  const colRight = pageWidth / 2 + 20;
+  const signer = data.extras?.signer || data.store.name;
+
   doc.setFontSize(11);
-  doc.text("Điều khoản & chính sách:", marginX, blockY);
+  doc.text("Đại diện bên bán (chữ ký):", colRight, blockY);
+  doc.text("__________________________", colRight, blockY + 24);
+  doc.text(signer, colRight, blockY + 40);
+
+  // === Điều khoản ===
   const terms =
     data.extras?.terms ||
-    "Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác. Không áp dụng cho sản phẩm giảm giá sâu hoặc đã qua sử dụng.";
-  doc.text(terms, marginX, blockY + 14, { maxWidth: pageWidth / 2 - marginX - 20 });
+    "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).";
+  doc.setFontSize(10);
+  doc.setFont("NotoSans", "normal");
+  doc.text(terms, marginX, blockY + 80, { maxWidth: pageWidth - 2 * marginX });
 
-  // Lời cảm ơn
-  doc.text("Lời cảm ơn:", marginX, blockY + 60);
+  // === Lời cảm ơn (in nghiêng) ===
   const thanks =
     data.extras?.thanksNote ||
     "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.";
-  doc.text(thanks, marginX, blockY + 74, { maxWidth: pageWidth / 2 - marginX - 20 });
-
-  // === Chữ ký bên bán (canh phải, không bị dính text trái) ===
-  const signer = data.extras?.signer || data.store.name;
-  const signX = pageWidth - marginX - 220;
-  const signY = blockY; // đặt cùng mức với tiêu đề Điều khoản nhưng ở cột phải
-  doc.text("Đại diện bên bán (chữ ký):", signX, signY);
-  doc.text("__________________________", signX, signY + 24);
-  doc.text(signer, signX, signY + 40);
+  doc.setFontSize(11);
+  doc.setFont("NotoSans-Italic", "italic");
+  doc.text(thanks, marginX, blockY + 110, { maxWidth: pageWidth - 2 * marginX });
 
   doc.save(`Invoice_${data.invoice.invoiceNumber}.pdf`);
 }

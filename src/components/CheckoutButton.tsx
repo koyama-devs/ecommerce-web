@@ -105,47 +105,72 @@ export async function generateInvoicePDF(data: InvoiceData) {
 
   // === Thông tin hóa đơn + khách hàng (dùng autoTable 2 cột) ===
   const invoiceInfo = [
-    ["Số hóa đơn:", data.invoice.invoiceNumber],
-    ["Ngày lập:", data.invoice.date],
-    ["Mã đơn hàng:", data.invoice.orderId],
-    ["Hình thức thanh toán:", data.invoice.paymentMethod],
-    ["Trạng thái:", data.invoice.paymentStatus],
+    ["Số hóa đơn", data.invoice.invoiceNumber],
+    ["Ngày lập", data.invoice.date],
+    ["Mã đơn hàng", data.invoice.orderId],
+    ["Hình thức thanh toán", data.invoice.paymentMethod],
+    ["Trạng thái", data.invoice.paymentStatus],
   ];
   const customerInfo = [
-    ["Họ tên:", data.customer.name],
-    data.customer.phone ? ["Điện thoại:", data.customer.phone] : null,
-    data.customer.email ? ["Email:", data.customer.email] : null,
-    data.customer.shippingAddress ? ["Đ/c giao hàng:", data.customer.shippingAddress] : null,
-    data.customer.customerId ? ["Mã KH:", data.customer.customerId] : null,
+    ["Họ tên", data.customer.name],
+    data.customer.phone ? ["Điện thoại", data.customer.phone] : null,
+    data.customer.email ? ["Email", data.customer.email] : null,
+    data.customer.shippingAddress ? ["Đ/c giao hàng", data.customer.shippingAddress] : null,
+    data.customer.customerId ? ["Mã KH", data.customer.customerId] : null,
   ].filter(Boolean) as [string, string][];
 
-  autoTable(doc, {
-    startY: y,
-    head: [["Thông tin hóa đơn", "Thông tin khách hàng"]],
-    body: invoiceInfo.map((row, i) => [
-      `${row[0]} ${row[1]}`,
-      customerInfo[i] ? `${customerInfo[i][0]} ${customerInfo[i][1]}` : "",
-    ]),
-    theme: "grid",
-    styles: { 
-      font: "NotoSans", 
-      fontStyle: "normal", 
-      fontSize: 10, 
-      cellPadding: 4, 
-      valign: "top" 
-    },
-    headStyles: { 
-      font: "NotoSans",      // 👈 ép dùng font embed
-      fontStyle: "normal", 
-      fontSize: 11, 
-      fillColor: [230, 230, 230], 
-      textColor: [0, 0, 0] 
-    },
-    columnStyles: {
-      0: { cellWidth: pageWidth / 2 - marginX, halign: "left" },
-      1: { cellWidth: pageWidth / 2 - marginX, halign: "left" },
-    },
-  });
+// Tạo dữ liệu
+const formattedInvoiceInfo = invoiceInfo.map(([label, value]) => [
+  { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Label in đậm
+  { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Value
+]);
+
+const formattedCustomerInfo = customerInfo.map(([label, value]) => [
+  { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Label in đậm
+  { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } }, // Value
+]);
+
+// Ghép body thành 4 cột phẳng
+const body = invoiceInfo.map((_, i) => [
+  formattedInvoiceInfo[i]?.[0] || "",
+  formattedInvoiceInfo[i]?.[1] || "",
+  formattedCustomerInfo[i]?.[0] || "",
+  formattedCustomerInfo[i]?.[1] || "",
+]);
+
+const usablePageWidth = pageWidth - marginX * 2; // Chiều rộng có thể sử dụng
+
+autoTable(doc, {
+  startY: y,
+  margin: { left: marginX, right: marginX }, // Thêm margin
+  head: [[
+    { content: "Thông tin hóa đơn", colSpan: 2},
+    { content: "Thông tin khách hàng", colSpan: 2},
+  ]],
+  body,
+  theme: "grid",
+  styles: {
+    font: "NotoSans",
+    fontStyle: "normal",
+    fontSize: 10,
+    cellPadding: 4,
+    valign: "top",
+  },
+  headStyles: {
+    halign: "left",
+    font: "NotoSans",
+    fontStyle: "normal",
+    fontSize: 11,
+    fillColor: [230, 230, 230],
+    textColor: [0, 0, 0],
+  },
+  columnStyles: {
+    0: { cellWidth: usablePageWidth * 0.15, halign: "left" }, // label invoice
+    1: { cellWidth: usablePageWidth * 0.35, halign: "left" }, // value invoice
+    2: { cellWidth: usablePageWidth * 0.15, halign: "left" }, // label customer
+    3: { cellWidth: usablePageWidth * 0.35, halign: "left" }, // value customer
+  },
+});
 
 
   // === Bảng sản phẩm ===

@@ -277,12 +277,14 @@ export async function generateInvoicePDF(data: InvoiceData) {
   // === Lời cảm ơn ===
   const thanks =
     data.extras?.thanksNote ||
-    "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.";
+    "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo.";
   doc.setFontSize(11);
   doc.setFont("NotoSans-Italic", "italic");
   doc.text(thanks, marginX, blockY + 110, { maxWidth: pageWidth - 2 * marginX });
 
-  doc.save(`Invoice_${data.invoice.invoiceNumber}.pdf`);
+  //doc.save(`Invoice_${data.invoice.invoiceNumber}.pdf`);
+  // ✅ Trả về blob
+  return doc.output("blob");
 }
 
 export default function CheckoutButton({

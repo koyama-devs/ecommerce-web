@@ -85,11 +85,23 @@ export default function CartPage() {
     logoUrl:
       "https://dummyimage.com/512x512/1e88e5/ffffff.png&text=LOGO",
   };
-
+  
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
-    await generateInvoicePDF(invoiceData);
+
+    const blob = await generateInvoicePDF(invoiceData);
+
+    // Tạo link download thủ công
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `invoice-${invoiceData.invoice.invoiceNumber}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
+
 
   return (
     <Container sx={{ py: 4 }}>
@@ -256,7 +268,6 @@ export default function CartPage() {
                 {invoiceData.extras?.thanksNote ||
                   "Cảm ơn quý khách đã mua hàng! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."}
               </Typography>
-
               <Button fullWidth variant="outlined" onClick={handleDownloadPDF}>
                 📄 Tải hóa đơn (PDF)
               </Button>

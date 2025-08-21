@@ -134,7 +134,7 @@ export default function PaymentForm({
             terms:
               "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác. Không áp dụng cho sản phẩm giảm giá sâu hoặc đã qua sử dụng.",
             thanksNote:
-              "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng.",
+              "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo.",
             signer: storeInfo.name,
           },
         };

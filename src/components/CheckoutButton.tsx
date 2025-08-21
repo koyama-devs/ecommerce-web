@@ -174,7 +174,13 @@ export async function generateInvoicePDF(data: InvoiceData) {
   const tableStartY = (doc as any).lastAutoTable.finalY + 20;
   autoTable(doc, {
     startY: tableStartY,
-    head: [["STT", "Tên sản phẩm", "SL", "Đơn giá", "Thành tiền"]],
+    head: [[
+      { content: "STT", styles: { halign: "center" } },
+      { content: "Tên sản phẩm", styles: { halign: "center" } },
+      { content: "SL", styles: { halign: "center" } },
+      { content: "Đơn giá", styles: { halign: "right" } },
+      { content: "Thành tiền", styles: { halign: "right" } },
+    ]],
     body: data.items.map((it, idx) => [
       String(idx + 1),
       it.name,
@@ -184,13 +190,21 @@ export async function generateInvoicePDF(data: InvoiceData) {
     ]),
     theme: "striped",
     styles: { font: "NotoSans", fontStyle: "normal", fontSize: 10, cellPadding: 6 },
-    headStyles: { font: "NotoSans", fontStyle: "normal", fillColor: [33, 150, 243] },
-    columnStyles: {
-      0: { halign: "center", cellWidth: 40 },
-      2: { halign: "center", cellWidth: 60 },
-      3: { halign: "right", cellWidth: 90 },
-      4: { halign: "right", cellWidth: 110 },
+    headStyles: {
+      font: "NotoSans",
+      fontStyle: "normal",
+      fontSize: 11,
+      fillColor: [33, 150, 243],
+      textColor: [255, 255, 255],
     },
+    columnStyles: {
+      0: { halign: "center", cellWidth: 40 },   // STT
+      1: { halign: "center" },                    // Tên sản phẩm
+      2: { halign: "center", cellWidth: 50 },   // SL
+      3: { halign: "right", cellWidth: 80 },    // Đơn giá
+      4: { halign: "right", cellWidth: 100 },   // Thành tiền
+    },
+    tableWidth: "auto",
   });
 
   // === Tổng kết thanh toán ===

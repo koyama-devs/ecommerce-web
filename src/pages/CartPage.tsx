@@ -85,7 +85,7 @@ export default function CartPage() {
     logoUrl:
       "https://dummyimage.com/512x512/1e88e5/ffffff.png&text=LOGO",
   };
-  
+
   const handleDownloadPDF = async () => {
     if (!invoiceData) return;
 
@@ -268,7 +268,22 @@ export default function CartPage() {
                 {invoiceData.extras?.thanksNote ||
                   "Cảm ơn quý khách đã mua hàng! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."}
               </Typography>
-              <Button fullWidth variant="outlined" onClick={handleDownloadPDF}>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={handleDownloadPDF}
+                sx={{
+                  mt: 2,
+                  borderColor: "primary.main",
+                  color: "primary.main",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    bgcolor: "primary.main",
+                    color: "white",
+                    borderColor: "primary.main",
+                  },
+                }}
+>
                 📄 Tải hóa đơn (PDF)
               </Button>
             </Paper>

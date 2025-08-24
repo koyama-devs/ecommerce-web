@@ -1,20 +1,20 @@
-import { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Button,
   Container,
   Grid,
+  InputAdornment,
   TextField,
-  Typography,
-  InputAdornment
+  Typography
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
-import { getAllProducts, getProductsBySearchTerm } from "../data/products";
-import SearchIcon from "@mui/icons-material/Search";
-import PriceFilter from "../components/PriceFilter";
-import PromoCarousel from "../components/PromoCarousel";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link as RouterLink } from "react-router-dom";
+import PriceFilter from "../components/PriceFilter";
+import ProductCard from "../components/ProductCard";
+import PromoCarousel from "../components/PromoCarousel";
+import { getAllProducts, getProductsBySearchTerm } from "../data/products";
 
 
 export default function HomePage() {
@@ -74,7 +74,7 @@ export default function HomePage() {
         <Grid container spacing={2}>
           {priceFilteredProducts.length > 0 ? (
             priceFilteredProducts.map((product) => (
-              <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Grid item xs={12} sm={6} md={3} key={product.id}>
                 <ProductCard product={product} />
               </Grid>
             ))

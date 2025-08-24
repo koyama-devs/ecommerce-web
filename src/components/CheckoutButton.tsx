@@ -5,9 +5,10 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import PaymentForm from "./PaymentForm";
 
-// import font đã convert
+// import font đã convert (base64)
 import "../fonts/NotoSans-base64.js";
 import "../fonts/NotoSans-Italic-base64.js";
+import "../fonts/NotoSansJP-base64.js";
 
 const stripePromise = loadStripe(
   "pk_test_51RvvuRJhVUeatzaxarReCCkpJ9HCqqnUjnOXlweugIBgyPqC9cOPiY0qZDQyiLq4ZEar8tl0prRZXOljOPSXYOFL00OVyMDP7l"
@@ -51,6 +52,20 @@ export type InvoiceData = {
   extras?: { terms?: string; thanksNote?: string; signer?: string };
 };
 
+// --- helper chọn font theo ngôn ngữ ---
+function getFontsByLang(lang: string) {
+  if (lang === "ja") {
+    return {
+      base: "NotoSansJP",
+      italic: "NotoSansJP", // Nhật không dùng italic riêng
+    };
+  }
+  return {
+    base: "NotoSans",
+    italic: "NotoSans-Italic",
+  };
+}
+
 const formatCurrency = (n: number, currency: string = "JPY") =>
   `${new Intl.NumberFormat("ja-JP").format(Math.round(n))} ${currency}`;
 
@@ -78,12 +93,15 @@ async function loadImageAsDataURL(url?: string): Promise<string | null> {
 
 export async function generateInvoicePDF(data: InvoiceData) {
   const t = i18n.t; // shortcut
+  const lang = i18n.language;
+  const { base: baseFont, italic: italicFont } = getFontsByLang(lang);
+
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const marginX = 40;
   let y = 50;
 
-  doc.setFont("NotoSans", "normal");
+  doc.setFont(baseFont, "normal");
 
   // === Logo + Tiêu đề ===
   const logoDataUrl = await loadImageAsDataURL(data.store.logoUrl);
@@ -122,13 +140,13 @@ export async function generateInvoicePDF(data: InvoiceData) {
   ].filter(Boolean) as [string, string][];
 
   const formattedInvoiceInfo = invoiceInfo.map(([label, value]) => [
-    { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } },
-    { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+    { content: label, styles: { font: baseFont, fontStyle: "normal" as const } },
+    { content: value, styles: { font: baseFont, fontStyle: "normal" as const } },
   ]);
 
   const formattedCustomerInfo = customerInfo.map(([label, value]) => [
-    { content: label, styles: { font: "NotoSans", fontStyle: "normal" as const } },
-    { content: value, styles: { font: "NotoSans", fontStyle: "normal" as const } },
+    { content: label, styles: { font: baseFont, fontStyle: "normal" as const } },
+    { content: value, styles: { font: baseFont, fontStyle: "normal" as const } },
   ]);
 
   const body = invoiceInfo.map((_, i) => [
@@ -150,7 +168,7 @@ export async function generateInvoicePDF(data: InvoiceData) {
     body,
     theme: "grid",
     styles: {
-      font: "NotoSans",
+      font: baseFont,
       fontStyle: "normal",
       fontSize: 10,
       cellPadding: 4,
@@ -158,7 +176,7 @@ export async function generateInvoicePDF(data: InvoiceData) {
     },
     headStyles: {
       halign: "left",
-      font: "NotoSans",
+      font: baseFont,
       fontStyle: "normal",
       fontSize: 11,
       fillColor: [230, 230, 230],
@@ -191,9 +209,9 @@ export async function generateInvoicePDF(data: InvoiceData) {
       formatCurrency(it.price * it.quantity, data.totals.currency || "JPY"),
     ]),
     theme: "striped",
-    styles: { font: "NotoSans", fontStyle: "normal", fontSize: 10, cellPadding: 6 },
+    styles: { font: baseFont, fontStyle: "normal", fontSize: 10, cellPadding: 6 },
     headStyles: {
-      font: "NotoSans",
+      font: baseFont,
       fontStyle: "normal",
       fontSize: 11,
       fillColor: [33, 150, 243],
@@ -252,7 +270,7 @@ export async function generateInvoicePDF(data: InvoiceData) {
     align: "right",
   });
   doc.setTextColor(0, 0, 0);
-  doc.setFont("NotoSans", "normal");
+  doc.setFont(baseFont, "normal");
 
   // === Chữ ký ===
   const blockY = yy + 60;
@@ -265,19 +283,17 @@ export async function generateInvoicePDF(data: InvoiceData) {
   doc.text(signer, colRight, blockY + 40);
 
   // === Điều khoản ===
-  const terms =
-    t("invoicePdf.termsDefault");
+  const terms = data.extras?.terms || t("invoicePdf.termsDefault");
   doc.setTextColor(255, 0, 0);
   doc.setFontSize(10);
-  doc.setFont("NotoSans", "normal");
+  doc.setFont(baseFont, "normal");
   doc.text(terms, marginX, blockY + 80, { maxWidth: pageWidth - 2 * marginX });
   doc.setTextColor(0, 0, 0);
 
   // === Lời cảm ơn ===
-  const thanks =
-    t("invoicePdf.thanksDefault");
+  const thanks = data.extras?.thanksNote || t("invoicePdf.thanksDefault");
   doc.setFontSize(11);
-  doc.setFont("NotoSans-Italic", "italic");
+  doc.setFont(italicFont, "italic");
   doc.text(thanks, marginX, blockY + 110, { maxWidth: pageWidth - 2 * marginX });
 
   //doc.save(`Invoice_${data.invoice.invoiceNumber}.pdf`);

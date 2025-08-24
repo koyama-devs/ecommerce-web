@@ -88,5 +88,104 @@
   "productDetail": {
     "notFound": "商品が見つかりませんでした",
     "addToCart": "カートに追加"
-  }
+  },
+  "payment": {
+    "title": "お支払い情報",
+    "processing": "処理中...",
+    "payNow": "¥{{amount}} を支払う",
+    "success": "お支払いが完了しました。ご購入ありがとうございます。",
+    "error": "支払いに失敗しました。",
+    "errorRequest": "リクエストの処理中にエラーが発生しました。",
+    "method": "カード（Stripe）",
+    "statusPaid": "支払い済み"
+  },
+  "form": {
+    "name": "氏名",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "address": "配送先住所"
+  },
+  "invoice": {
+    "terms": "※ タグが付いたままの商品に限り7日以内の返品が可能です（大幅割引商品や中古品は対象外）。",
+    "thanksNote": "ご購入いただきありがとうございます。サポートが必要な場合は、当店のホットラインまたはメールにご連絡ください。今後ともよろしくお願いいたします。"
+  },
+  "orderSuccessPage": {
+    "noInvoiceData": "請求書データが見つかりません。",
+    "paymentSuccess": "お支払いが完了しました。ご購入ありがとうございます。",
+    "store": {
+      "phone": "電話",
+      "taxId": "税番号"
+    },
+    "invoice": {
+      "title": "請求書",
+      "number": "請求番号",
+      "date": "日付",
+      "orderId": "注文番号",
+      "paymentMethod": "支払方法",
+      "paymentStatus": "ステータス"
+    },
+    "customer": {
+      "title": "顧客情報",
+      "name": "氏名",
+      "phone": "電話番号",
+      "address": "配送先住所",
+      "id": "顧客ID"
+    },
+    "items": {
+      "title": "商品詳細"
+    },
+    "summary": {
+      "subtotal": "小計",
+      "tax": "税金",
+      "shippingFee": "送料",
+      "discount": "割引",
+      "total": "合計"
+    },
+    "extras": {
+      "termsTitle": "利用規約・返品ポリシー",
+      "termsDefault": "※ 商品タグが付いたままの商品は7日以内に返品可能（店舗ポリシーに従う）。",
+      "thanksTitle": "お礼",
+      "thanksDefault": "ご購入いただきありがとうございます。またのご利用をお待ちしております。"
+    },
+    "buttons": {
+      "downloadPDF": "請求書をダウンロード (PDF)",
+      "backHome": "ホームに戻る"
+    }
+  },
+  "invoicePdf": {
+  "title": "請求書",
+  "phone": "電話",
+  "email": "メール",
+  "taxId": "税番号",
+  "no": "請求書番号",
+  "date": "発行日",
+  "orderId": "注文番号",
+  "paymentMethod": "お支払い方法",
+  "status": "ステータス",
+  "customer": {
+    "name": "氏名",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "address": "配送先住所",
+    "id": "顧客ID"
+  },
+  "invoiceInfo": "請求書情報",
+  "customerInfo": "顧客情報",
+  "products": {
+    "index": "番号",
+    "name": "商品名",
+    "qty": "数量",
+    "unitPrice": "単価",
+    "total": "金額"
+  },
+  "summary": "お支払いサマリー",
+  "subtotal": "小計：",
+  "tax": "税金",
+  "shipping": "送料：",
+  "discount": "割引：",
+  "grandTotal": "合計：",
+  "signature": "販売者代表（署名）：",
+  "termsDefault": "※ 商品は未使用・未開封で、タグ/ラベルが付いた状態に限り7日以内の返品・交換が可能です。（大幅値引き商品や中古品は対象外）",
+  "thanksDefault": "ご購入いただき誠にありがとうございます！ ご不明点やサポートが必要な場合は、店舗のホットラインまたはメールにてお問い合わせください。 またのご利用を心よりお待ちしております。"
+}
 }

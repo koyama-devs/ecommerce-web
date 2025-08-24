@@ -88,5 +88,104 @@
   "productDetail": {
     "notFound": "Product not found",
     "addToCart": "Add to Cart"
+  },
+  "payment": {
+    "title": "Payment Information",
+    "processing": "Processing...",
+    "payNow": "Pay ¥{{amount}}",
+    "success": "Payment successful! Thank you for your purchase.",
+    "error": "Payment failed.",
+    "errorRequest": "An error occurred while processing your request.",
+    "method": "Card (Stripe)",
+    "statusPaid": "Paid"
+  },
+  "form": {
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email",
+    "address": "Shipping Address"
+  },
+  "invoice": {
+    "terms": "※ Returns are accepted within 7 days for items with intact tags (not applicable to heavily discounted or used items).",
+    "thanksNote": "Thank you for your purchase! For support, please contact our hotline or store email. We look forward to serving you again in future orders."
+  },
+  "orderSuccessPage": {
+    "noInvoiceData": "Invoice data not found.",
+    "paymentSuccess": "Payment successful! Thank you for your purchase.",
+    "store": {
+      "phone": "Tel",
+      "taxId": "Tax ID"
+    },
+    "invoice": {
+      "title": "INVOICE",
+      "number": "Invoice No.",
+      "date": "Date",
+      "orderId": "Order ID",
+      "paymentMethod": "Payment Method",
+      "paymentStatus": "Status"
+    },
+    "customer": {
+      "title": "Customer Information",
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Shipping Address",
+      "id": "Customer ID"
+    },
+    "items": {
+      "title": "Order Details"
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "tax": "Tax",
+      "shippingFee": "Shipping Fee",
+      "discount": "Discount",
+      "total": "TOTAL"
+    },
+    "extras": {
+      "termsTitle": "Terms & Return Policy",
+      "termsDefault": "※ Returns within 7 days for items with original tags, according to store policy.",
+      "thanksTitle": "Thank You",
+      "thanksDefault": "Thank you for shopping with us! We look forward to serving you again."
+    },
+    "buttons": {
+      "downloadPDF": "Download Invoice (PDF)",
+      "backHome": "Back to Home"
+    }
+  },
+  "invoicePdf": {
+    "title": "INVOICE",
+    "phone": "Phone",
+    "email": "Email",
+    "taxId": "Tax ID",
+    "no": "Invoice No.",
+    "date": "Issue Date",
+    "orderId": "Order ID",
+    "paymentMethod": "Payment Method",
+    "status": "Status",
+    "customer": {
+      "name": "Customer Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Shipping Address",
+      "id": "Customer ID"
+    },
+    "invoiceInfo": "Invoice Information",
+    "customerInfo": "Customer Information",
+    "products": {
+      "index": "No.",
+      "name": "Product Name",
+      "qty": "Qty",
+      "unitPrice": "Unit Price",
+      "total": "Amount"
+    },
+    "summary": "Payment Summary",
+    "subtotal": "Subtotal:",
+    "tax": "Tax",
+    "shipping": "Shipping Fee:",
+    "discount": "Discount:",
+    "grandTotal": "TOTAL:",
+    "signature": "Seller's Representative (Signature):",
+    "termsDefault": "※ Returns/exchanges within 7 days for items in original condition with tags attached. Not applicable to heavily discounted or used items.",
+    "thanksDefault": "Thank you for your purchase! If you need assistance, please contact our hotline or email. We look forward to serving you again."
   }
 }

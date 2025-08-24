@@ -9,6 +9,7 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { InvoiceData } from "../components/CheckoutButton";
 import { generateInvoicePDF } from "../components/CheckoutButton";
@@ -17,12 +18,13 @@ export default function OrderSuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const invoiceData = location.state as InvoiceData | null;
+  const { t } = useTranslation();
 
   if (!invoiceData) {
     return (
       <Container sx={{ py: 4 }}>
         <Typography align="center" color="error">
-          Không tìm thấy dữ liệu hóa đơn.
+          {t("orderSuccessPage.noInvoiceData")}
         </Typography>
       </Container>
     );
@@ -60,7 +62,7 @@ export default function OrderSuccessPage() {
             fontWeight: "bold",
           }}
         >
-          Thanh toán thành công! Cảm ơn bạn đã mua hàng.
+          {t("orderSuccessPage.paymentSuccess")}
         </Alert>
 
         <Paper
@@ -81,10 +83,13 @@ export default function OrderSuccessPage() {
               </Typography>
               <Typography>{invoiceData.store.address}</Typography>
               <Typography>
-                ĐT: {invoiceData.store.phone} | Email: {invoiceData.store.email}
+                {t("orderSuccessPage.store.phone")}: {invoiceData.store.phone} | Email:{" "}
+                {invoiceData.store.email}
               </Typography>
               {invoiceData.store.taxId && (
-                <Typography>MST: {invoiceData.store.taxId}</Typography>
+                <Typography>
+                  {t("orderSuccessPage.store.taxId")}: {invoiceData.store.taxId}
+                </Typography>
               )}
             </Grid>
             <Grid
@@ -94,16 +99,25 @@ export default function OrderSuccessPage() {
               sx={{ textAlign: { xs: "left", sm: "right" } }}
             >
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                HÓA ĐƠN
-              </Typography>
-              <Typography>Số HĐ: {invoiceData.invoice.invoiceNumber}</Typography>
-              <Typography>Ngày: {invoiceData.invoice.date}</Typography>
-              <Typography>Mã đơn: {invoiceData.invoice.orderId}</Typography>
-              <Typography>
-                Thanh toán: {invoiceData.invoice.paymentMethod}
+                {t("orderSuccessPage.invoice.title")}
               </Typography>
               <Typography>
-                Trạng thái: {invoiceData.invoice.paymentStatus}
+                {t("orderSuccessPage.invoice.number")}:{" "}
+                {invoiceData.invoice.invoiceNumber}
+              </Typography>
+              <Typography>
+                {t("orderSuccessPage.invoice.date")}: {invoiceData.invoice.date}
+              </Typography>
+              <Typography>
+                {t("orderSuccessPage.invoice.orderId")}: {invoiceData.invoice.orderId}
+              </Typography>
+              <Typography>
+                {t("orderSuccessPage.invoice.paymentMethod")}:{" "}
+                {invoiceData.invoice.paymentMethod}
+              </Typography>
+              <Typography>
+                {t("orderSuccessPage.invoice.paymentStatus")}:{" "}
+                {invoiceData.invoice.paymentStatus}
               </Typography>
             </Grid>
           </Grid>
@@ -115,33 +129,39 @@ export default function OrderSuccessPage() {
                 variant="subtitle1"
                 sx={{ fontWeight: "bold", mb: 1 }}
               >
-                Thông tin khách hàng
+                {t("orderSuccessPage.customer.title")}
               </Typography>
-              <Typography>Họ tên: {invoiceData.customer.name}</Typography>
+              <Typography>
+                {t("orderSuccessPage.customer.name")}: {invoiceData.customer.name}
+              </Typography>
               {invoiceData.customer.phone && (
-                <Typography>Điện thoại: {invoiceData.customer.phone}</Typography>
+                <Typography>
+                  {t("orderSuccessPage.customer.phone")}: {invoiceData.customer.phone}
+                </Typography>
               )}
               {invoiceData.customer.email && (
-                <Typography>Email: {invoiceData.customer.email}</Typography>
+                <Typography>
+                  Email: {invoiceData.customer.email}
+                </Typography>
               )}
               {invoiceData.customer.shippingAddress && (
                 <Typography>
-                  Đ/c giao hàng: {invoiceData.customer.shippingAddress}
+                  {t("orderSuccessPage.customer.address")}:{" "}
+                  {invoiceData.customer.shippingAddress}
                 </Typography>
               )}
               {invoiceData.customer.customerId && (
-                <Typography>Mã KH: {invoiceData.customer.customerId}</Typography>
+                <Typography>
+                  {t("orderSuccessPage.customer.id")}: {invoiceData.customer.customerId}
+                </Typography>
               )}
             </Grid>
           </Grid>
 
           {/* Items */}
           <Divider sx={{ my: 2 }} />
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: "bold", mb: 1 }}
-          >
-            Chi tiết sản phẩm
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
+            {t("orderSuccessPage.items.title")}
           </Typography>
           {invoiceData.items.map((item, idx) => (
             <Stack
@@ -162,23 +182,15 @@ export default function OrderSuccessPage() {
           {/* Summary */}
           <Divider sx={{ my: 2 }} />
           <Box sx={{ maxWidth: 360, ml: "auto" }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              sx={{ mb: 0.5 }}
-            >
-              <Typography>Tổng giá trị sản phẩm:</Typography>
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+              <Typography>{t("orderSuccessPage.summary.subtotal")}:</Typography>
               <Typography>
                 {formattedPrice(invoiceData.totals.subtotal)}
               </Typography>
             </Stack>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              sx={{ mb: 0.5 }}
-            >
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
               <Typography>
-                Thuế
+                {t("orderSuccessPage.summary.tax")}
                 {invoiceData.totals.vatRate
                   ? ` (${Math.round(invoiceData.totals.vatRate * 100)}%)`
                   : ""}
@@ -186,22 +198,14 @@ export default function OrderSuccessPage() {
               </Typography>
               <Typography>{formattedPrice(invoiceData.totals.tax)}</Typography>
             </Stack>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              sx={{ mb: 0.5 }}
-            >
-              <Typography>Phí vận chuyển:</Typography>
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+              <Typography>{t("orderSuccessPage.summary.shippingFee")}:</Typography>
               <Typography>
                 {formattedPrice(invoiceData.totals.shippingFee)}
               </Typography>
             </Stack>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              sx={{ mb: 0.5 }}
-            >
-              <Typography>Giảm giá:</Typography>
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+              <Typography>{t("orderSuccessPage.summary.discount")}:</Typography>
               <Typography>
                 -{formattedPrice(invoiceData.totals.discount)}
               </Typography>
@@ -209,7 +213,9 @@ export default function OrderSuccessPage() {
 
             <Divider sx={{ my: 1 }} />
             <Stack direction="row" justifyContent="space-between">
-              <Typography fontWeight="bold">TỔNG CỘNG:</Typography>
+              <Typography fontWeight="bold">
+                {t("orderSuccessPage.summary.total")}:
+              </Typography>
               <Typography fontWeight="bold" color="primary">
                 {formattedPrice(invoiceData.totals.grandTotal)}
               </Typography>
@@ -219,18 +225,16 @@ export default function OrderSuccessPage() {
           {/* Extras */}
           <Divider sx={{ my: 2 }} />
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-            Điều khoản & chính sách đổi trả
+            {t("orderSuccessPage.extras.termsTitle")}
           </Typography>
           <Typography sx={{ mb: 1 }}>
-            {invoiceData.extras?.terms ||
-              "※ Đổi trả trong 7 ngày với sản phẩm còn nguyên tem/mác theo chính sách của cửa hàng."}
+            {t("orderSuccessPage.extras.termsDefault")}
           </Typography>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-            Lời cảm ơn
+            {t("orderSuccessPage.extras.thanksTitle")}
           </Typography>
           <Typography sx={{ mb: 2 }}>
-            {invoiceData.extras?.thanksNote ||
-              "Cảm ơn quý khách đã mua hàng! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."}
+            { t("orderSuccessPage.extras.thanksDefault")}
           </Typography>
 
           <Stack spacing={2}>
@@ -249,10 +253,9 @@ export default function OrderSuccessPage() {
                 },
               }}
             >
-              📄 Tải hóa đơn (PDF)
+              📄 {t("orderSuccessPage.buttons.downloadPDF")}
             </Button>
 
-            {/* Nút mới quay về trang chủ */}
             <Button
               fullWidth
               variant="contained"
@@ -260,7 +263,7 @@ export default function OrderSuccessPage() {
               onClick={() => navigate("/")}
               sx={{ fontWeight: "bold" }}
             >
-              ⬅️ Quay về trang chủ
+              ⬅️ {t("orderSuccessPage.buttons.backHome")}
             </Button>
           </Stack>
         </Paper>

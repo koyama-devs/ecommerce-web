@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type {
   CartItem,
   InvoiceData,
@@ -39,6 +40,7 @@ export default function PaymentForm({
   discount = 0,
   onSuccess,
 }: PaymentFormProps) {
+  const { t } = useTranslation();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -81,7 +83,7 @@ export default function PaymentForm({
       const res = await fetch("http://localhost:3001/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(totalPrice) }), // yên là đơn vị nhỏ nhất, không có "cent"
+        body: JSON.stringify({ amount: Math.round(totalPrice) }),
       });
 
       const data = await res.json();
@@ -101,7 +103,7 @@ export default function PaymentForm({
 
       if (result.error) {
         setPaymentStatus("error");
-        setPaymentMessage(result.error.message || "Thanh toán thất bại.");
+        setPaymentMessage(result.error.message || t("payment.error"));
       } else if (result.paymentIntent?.status === "succeeded") {
         const { subtotal, tax, grandTotal } = calcTotals();
 
@@ -111,8 +113,8 @@ export default function PaymentForm({
             invoiceNumber: randomId("INV"),
             date: new Date().toLocaleString(),
             orderId: result.paymentIntent.id || randomId("ORD"),
-            paymentMethod: "Thẻ (Stripe)",
-            paymentStatus: "Đã thanh toán",
+            paymentMethod: t("payment.method"),
+            paymentStatus: t("payment.statusPaid"),
           },
           customer: {
             name,
@@ -131,25 +133,21 @@ export default function PaymentForm({
             vatRate: taxRate,
           },
           extras: {
-            terms:
-              "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác. Không áp dụng cho sản phẩm giảm giá sâu hoặc đã qua sử dụng.",
-            thanksNote:
-              "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo.",
+            terms: t("invoice.terms"),
+            thanksNote: t("invoice.thanksNote"),
             signer: storeInfo.name,
           },
         };
 
         setPaymentStatus("success");
-        setPaymentMessage("Thanh toán thành công! Cảm ơn bạn đã mua hàng.");
+        setPaymentMessage(t("payment.success"));
 
-        // Tạo PDF đồng bộ
         await generateInvoicePDF(invoiceData);
-
         onSuccess(invoiceData);
       }
     } catch (err: any) {
       setPaymentStatus("error");
-      setPaymentMessage(err.message || "Có lỗi xảy ra khi gửi yêu cầu.");
+      setPaymentMessage(err.message || t("payment.errorRequest"));
     }
 
     setLoading(false);
@@ -159,7 +157,7 @@ export default function PaymentForm({
     <Card sx={{ mt: 4, maxWidth: 640, mx: "auto", boxShadow: 3, borderRadius: 2 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom sx={{ textAlign: "center", fontWeight: "bold" }}>
-          Thông tin thanh toán
+          {t("payment.title")}
         </Typography>
 
         {paymentStatus && (
@@ -173,19 +171,24 @@ export default function PaymentForm({
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Họ và tên"
+                label={t("form.name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Số điện thoại" value={phone} onChange={(e) => setPhone(e.target.value)} />
+              <TextField
+                fullWidth
+                label={t("form.phone")}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Email"
+                label={t("form.email")}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -195,7 +198,7 @@ export default function PaymentForm({
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Địa chỉ giao hàng"
+                label={t("form.address")}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
@@ -235,7 +238,7 @@ export default function PaymentForm({
             startIcon={loading ? <CircularProgress size={20} /> : null}
             sx={{ py: 1.5, fontWeight: "bold" }}
           >
-            {loading ? "Đang xử lý..." : `Thanh toán ¥${Math.round(totalPrice)}`}
+            {loading ? t("payment.processing") : t("payment.payNow", { amount: Math.round(totalPrice) })}
           </Button>
         </Box>
       </CardContent>

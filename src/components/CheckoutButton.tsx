@@ -1,5 +1,6 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import i18n from "i18next";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import PaymentForm from "./PaymentForm";
@@ -28,7 +29,7 @@ export type InvoiceData = {
     date: string;
     orderId: string;
     paymentMethod: string;
-    paymentStatus: "Đã thanh toán" | "Chưa thanh toán";
+    paymentStatus: string;
   };
   customer: {
     name: string;
@@ -76,6 +77,7 @@ async function loadImageAsDataURL(url?: string): Promise<string | null> {
 }
 
 export async function generateInvoicePDF(data: InvoiceData) {
+  const t = i18n.t; // shortcut
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const marginX = 40;
@@ -89,14 +91,14 @@ export async function generateInvoicePDF(data: InvoiceData) {
 
   doc.setFontSize(20);
   doc.setTextColor(33, 33, 33);
-  doc.text("HÓA ĐƠN THANH TOÁN", pageWidth / 2, y + 30, { align: "center" });
+  doc.text(t("invoicePdf.title"), pageWidth / 2, y + 30, { align: "center" });
 
   doc.setFontSize(10);
   const storeLines = [
     data.store.name,
     data.store.address,
-    `ĐT: ${data.store.phone} | Email: ${data.store.email}`,
-    data.store.taxId ? `MST: ${data.store.taxId}` : "",
+    `${t("invoicePdf.phone")}: ${data.store.phone} | ${t("invoicePdf.email")}: ${data.store.email}`,
+    data.store.taxId ? `${t("invoicePdf.taxId")}: ${data.store.taxId}` : "",
   ].filter(Boolean);
 
   let storeY = y + 100;
@@ -105,18 +107,18 @@ export async function generateInvoicePDF(data: InvoiceData) {
 
   // === Thông tin hóa đơn + khách hàng ===
   const invoiceInfo = [
-    ["Số hóa đơn", data.invoice.invoiceNumber],
-    ["Ngày lập", data.invoice.date],
-    ["Mã đơn hàng", data.invoice.orderId],
-    ["Hình thức thanh toán", data.invoice.paymentMethod],
-    ["Trạng thái", data.invoice.paymentStatus],
+    [t("invoicePdf.no"), data.invoice.invoiceNumber],
+    [t("invoicePdf.date"), data.invoice.date],
+    [t("invoicePdf.orderId"), data.invoice.orderId],
+    [t("invoicePdf.paymentMethod"), data.invoice.paymentMethod],
+    [t("invoicePdf.status"), data.invoice.paymentStatus],
   ];
   const customerInfo = [
-    ["Họ tên", data.customer.name],
-    data.customer.phone ? ["Điện thoại", data.customer.phone] : null,
-    data.customer.email ? ["Email", data.customer.email] : null,
-    data.customer.shippingAddress ? ["Đ/c giao hàng", data.customer.shippingAddress] : null,
-    data.customer.customerId ? ["Mã KH", data.customer.customerId] : null,
+    [t("invoicePdf.customer.name"), data.customer.name],
+    data.customer.phone ? [t("invoicePdf.customer.phone"), data.customer.phone] : null,
+    data.customer.email ? [t("invoicePdf.customer.email"), data.customer.email] : null,
+    data.customer.shippingAddress ? [t("invoicePdf.customer.address"), data.customer.shippingAddress] : null,
+    data.customer.customerId ? [t("invoicePdf.customer.id"), data.customer.customerId] : null,
   ].filter(Boolean) as [string, string][];
 
   const formattedInvoiceInfo = invoiceInfo.map(([label, value]) => [
@@ -142,8 +144,8 @@ export async function generateInvoicePDF(data: InvoiceData) {
     startY: y,
     margin: { left: marginX, right: marginX },
     head: [[
-      { content: "Thông tin hóa đơn", colSpan: 2 },
-      { content: "Thông tin khách hàng", colSpan: 2 },
+      { content: t("invoicePdf.invoiceInfo"), colSpan: 2 },
+      { content: t("invoicePdf.customerInfo"), colSpan: 2 },
     ]],
     body,
     theme: "grid",
@@ -175,11 +177,11 @@ export async function generateInvoicePDF(data: InvoiceData) {
   autoTable(doc, {
     startY: tableStartY,
     head: [[
-      { content: "STT", styles: { halign: "center" } },
-      { content: "Tên sản phẩm", styles: { halign: "center" } },
-      { content: "SL", styles: { halign: "center" } },
-      { content: "Đơn giá", styles: { halign: "right" } },
-      { content: "Thành tiền", styles: { halign: "right" } },
+      { content: t("invoicePdf.products.index"), styles: { halign: "center" } },
+      { content: t("invoicePdf.products.name"), styles: { halign: "center" } },
+      { content: t("invoicePdf.products.qty"), styles: { halign: "center" } },
+      { content: t("invoicePdf.products.unitPrice"), styles: { halign: "right" } },
+      { content: t("invoicePdf.products.total"), styles: { halign: "right" } },
     ]],
     body: data.items.map((it, idx) => [
       String(idx + 1),
@@ -198,11 +200,11 @@ export async function generateInvoicePDF(data: InvoiceData) {
       textColor: [255, 255, 255],
     },
     columnStyles: {
-      0: { halign: "center", cellWidth: 40 },   // STT
-      1: { halign: "center" },                    // Tên sản phẩm
-      2: { halign: "center", cellWidth: 50 },   // SL
-      3: { halign: "right", cellWidth: 80 },    // Đơn giá
-      4: { halign: "right", cellWidth: 100 },   // Thành tiền
+      0: { halign: "center", cellWidth: 40 },
+      1: { halign: "center" },
+      2: { halign: "center", cellWidth: 50 },
+      3: { halign: "right", cellWidth: 80 },
+      4: { halign: "right", cellWidth: 100 },
     },
     tableWidth: "auto",
   });
@@ -214,20 +216,20 @@ export async function generateInvoicePDF(data: InvoiceData) {
   const currency = data.totals.currency || "JPY";
 
   doc.setDrawColor(200);
-  doc.rect(summaryX, afterTableY, summaryWidth, 140); // tăng chiều cao box thêm 10px
+  doc.rect(summaryX, afterTableY, summaryWidth, 140);
 
   doc.setFontSize(12);
   doc.setTextColor(0, 0, 0);
-  doc.text("Tổng kết thanh toán", summaryX + 10, afterTableY + 20);
+  doc.text(t("invoicePdf.summary"), summaryX + 10, afterTableY + 20);
 
   const summary = [
-    ["Tạm tính:", formatCurrency(data.totals.subtotal, currency)],
+    [t("invoicePdf.subtotal"), formatCurrency(data.totals.subtotal, currency)],
     [
-      `Thuế${data.totals.vatRate ? ` (${Math.round(data.totals.vatRate * 100)}%)` : ""}:`,
+      `${t("invoicePdf.tax")}${data.totals.vatRate ? ` (${Math.round(data.totals.vatRate * 100)}%)` : ""}:`,
       formatCurrency(data.totals.tax, currency),
     ],
-    ["Phí vận chuyển:", formatCurrency(data.totals.shippingFee, currency)],
-    ["Giảm giá:", `- ${formatCurrency(data.totals.discount, currency)}`],
+    [t("invoicePdf.shipping"), formatCurrency(data.totals.shippingFee, currency)],
+    [t("invoicePdf.discount"), `- ${formatCurrency(data.totals.discount, currency)}`],
   ];
 
   let yy = afterTableY + 40;
@@ -237,21 +239,19 @@ export async function generateInvoicePDF(data: InvoiceData) {
     yy += 16;
   });
 
-  // Đường phân cách trước TỔNG CỘNG
   doc.setLineWidth(0.5);
   doc.line(summaryX + 10, yy, summaryX + summaryWidth - 10, yy);
-  yy += 25; // chừa thêm khoảng cách
+  yy += 25;
 
-  // In TỔNG CỘNG
   doc.setFontSize(13);
   doc.setTextColor(0, 0, 0);
-  doc.text("TỔNG CỘNG:", summaryX + 10, yy);
+  doc.text(t("invoicePdf.grandTotal"), summaryX + 10, yy);
 
-  doc.setTextColor(255, 87, 34); // màu cam cho số tiền
+  doc.setTextColor(255, 87, 34);
   doc.text(formatCurrency(data.totals.grandTotal, currency), summaryX + summaryWidth - 10, yy, {
     align: "right",
   });
-  doc.setTextColor(0, 0, 0); // reset màu về mặc định
+  doc.setTextColor(0, 0, 0);
   doc.setFont("NotoSans", "normal");
 
   // === Chữ ký ===
@@ -260,14 +260,13 @@ export async function generateInvoicePDF(data: InvoiceData) {
   const signer = data.extras?.signer || data.store.name;
 
   doc.setFontSize(11);
-  doc.text("Đại diện bên bán (chữ ký):", colRight, blockY);
+  doc.text(t("invoicePdf.signature"), colRight, blockY);
   doc.text("__________________________", colRight, blockY + 24);
   doc.text(signer, colRight, blockY + 40);
 
   // === Điều khoản ===
   const terms =
-    data.extras?.terms ||
-    "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).";
+    t("invoicePdf.termsDefault");
   doc.setTextColor(255, 0, 0);
   doc.setFontSize(10);
   doc.setFont("NotoSans", "normal");
@@ -276,8 +275,7 @@ export async function generateInvoicePDF(data: InvoiceData) {
 
   // === Lời cảm ơn ===
   const thanks =
-    data.extras?.thanksNote ||
-    "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo.";
+    t("invoicePdf.thanksDefault");
   doc.setFontSize(11);
   doc.setFont("NotoSans-Italic", "italic");
   doc.text(thanks, marginX, blockY + 110, { maxWidth: pageWidth - 2 * marginX });

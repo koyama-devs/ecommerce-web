@@ -88,5 +88,104 @@
   "productDetail": {
     "notFound": "Không tìm thấy sản phẩm",
     "addToCart": "Thêm vào giỏ"
-  }
+  },
+  "payment": {
+    "title": "Thông tin thanh toán",
+    "processing": "Đang xử lý...",
+    "payNow": "Thanh toán ¥{{amount}}",
+    "success": "Thanh toán thành công! Cảm ơn bạn đã mua hàng.",
+    "error": "Thanh toán thất bại.",
+    "errorRequest": "Có lỗi xảy ra khi gửi yêu cầu.",
+    "method": "Thẻ (Stripe)",
+    "statusPaid": "Đã thanh toán"
+  },
+  "form": {
+    "name": "Họ và tên",
+    "phone": "Số điện thoại",
+    "email": "Email",
+    "address": "Địa chỉ giao hàng"
+  },
+  "invoice": {
+    "terms": "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).",
+    "thanksNote": "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo."
+  },
+  "orderSuccessPage": {
+    "noInvoiceData": "Không tìm thấy dữ liệu hóa đơn.",
+    "paymentSuccess": "Thanh toán thành công! Cảm ơn bạn đã mua hàng.",
+    "store": {
+      "phone": "ĐT",
+      "taxId": "MST"
+    },
+    "invoice": {
+      "title": "HÓA ĐƠN",
+      "number": "Số HĐ",
+      "date": "Ngày",
+      "orderId": "Mã đơn",
+      "paymentMethod": "Thanh toán",
+      "paymentStatus": "Trạng thái"
+    },
+    "customer": {
+      "title": "Thông tin khách hàng",
+      "name": "Họ tên",
+      "phone": "Điện thoại",
+      "address": "Đ/c giao hàng",
+      "id": "Mã KH"
+    },
+    "items": {
+      "title": "Chi tiết sản phẩm"
+    },
+    "summary": {
+      "subtotal": "Tổng giá trị sản phẩm",
+      "tax": "Thuế",
+      "shippingFee": "Phí vận chuyển",
+      "discount": "Giảm giá",
+      "total": "TỔNG CỘNG"
+    },
+    "extras": {
+      "termsTitle": "Điều khoản & chính sách đổi trả",
+      "termsDefault": "※ Đổi trả trong 7 ngày với sản phẩm còn nguyên tem/mác theo chính sách của cửa hàng.",
+      "thanksTitle": "Lời cảm ơn",
+      "thanksDefault": "Cảm ơn quý khách đã mua hàng! Hẹn gặp lại quý khách trong những đơn hàng tiếp theo."
+    },
+    "buttons": {
+      "downloadPDF": "Tải hóa đơn (PDF)",
+      "backHome": "Quay về trang chủ"
+    }
+  },
+  "invoicePdf": {
+  "title": "HÓA ĐƠN THANH TOÁN",
+  "phone": "ĐT",
+  "email": "Email",
+  "taxId": "MST",
+  "no": "Số hóa đơn",
+  "date": "Ngày lập",
+  "orderId": "Mã đơn hàng",
+  "paymentMethod": "Hình thức thanh toán",
+  "status": "Trạng thái",
+  "customer": {
+    "name": "Họ tên",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "address": "Đ/c giao hàng",
+    "id": "Mã KH"
+  },
+  "invoiceInfo": "Thông tin hóa đơn",
+  "customerInfo": "Thông tin khách hàng",
+  "products": {
+    "index": "STT",
+    "name": "Tên sản phẩm",
+    "qty": "SL",
+    "unitPrice": "Đơn giá",
+    "total": "Thành tiền"
+  },
+  "summary": "Tổng kết thanh toán",
+  "subtotal": "Tạm tính:",
+  "tax": "Thuế",
+  "shipping": "Phí vận chuyển:",
+  "discount": "Giảm giá:",
+  "grandTotal": "TỔNG CỘNG:",
+  "signature": "Đại diện bên bán (chữ ký):",
+  "termsDefault": "※ Đổi trả trong vòng 7 ngày với sản phẩm còn nguyên tem/mác (không áp dụng cho hàng giảm giá sâu hoặc đã qua sử dụng).",
+  "thanksDefault": "Cảm ơn quý khách đã mua hàng! Nếu cần hỗ trợ, vui lòng liên hệ hotline hoặc email của cửa hàng. Xin chào và hẹn gặp lại quý khách trong những đơn hàng tiếp theo."
+}
 }
